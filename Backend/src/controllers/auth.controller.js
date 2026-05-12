@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const { OAuth2Client } = require("google-auth-library");
 
-const client = new OAuth2Client("109516426832-dl54n2gtmmunkm18850k4e6bdhpk2cbi.apps.googleusercontent.com");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: "1d",
@@ -82,7 +82,7 @@ const googleLogin = async (req, res) => {
     const { credential } = req.body;
     const ticket = await client.verifyIdToken({
       idToken: credential,
-      audience: "109516426832-dl54n2gtmmunkm18850k4e6bdhpk2cbi.apps.googleusercontent.com",
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
     const payload = ticket.getPayload();
     const { email, name } = payload;
